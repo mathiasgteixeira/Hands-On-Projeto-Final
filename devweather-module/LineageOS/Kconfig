@@ -1,0 +1,6 @@
+config DEVWEATHER
+ tristate "DevWeather module"
+ default m
+ depends on MODULES
+ help
+   DevWeather is a meteorological station device developed for the final hands-on in DevTITANS course.
