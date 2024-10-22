@@ -1,0 +1,9 @@
+cc_binary {
+    name:         "devweather_client",
+    srcs:         [ "devweather_client.cpp" ],
+
+    shared_libs:  [ "devweather_lib" ],
+    required:     [ "devweather_lib" ],
+
+    vendor: true,
+}
