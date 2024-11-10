@@ -1,0 +1,21 @@
+cc_binary {
+    name:                  "devtitans.devweather-service",
+    relative_install_path: "hw",                           // HALs ficam armazenados dentro do subdiretório hw do bin
+    init_rc:               ["devweather-default.rc"],      // Usado pelo init para iniciar o serviço
+    vintf_fragments:       ["devweather-default.xml"],     // Este módulo "provê" o serviço Devweather
+    vendor:                true,
+
+    shared_libs: [
+        "libbase",                                         // Contém o logging e métodos convenientes
+        "libbinder_ndk",                                   // Biblioteca do binder usada na criação de HALs
+        "devweather_lib",                                  // Biblioteca do devweather criada anteriormente
+        "devtitans.devweather-V1-ndk",                     // Biblioteca criada automaticamente pelo AIDL do devweather
+    ],
+
+    srcs: [
+        "devweather_service.cpp",
+        "main.cpp"
+    ],
+
+    required: [ "devweather_lib" ],
+}

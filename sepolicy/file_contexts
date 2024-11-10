@@ -1,0 +1,9 @@
+# Define o rótulo do daemon HelloDaemonCpp
+/vendor/bin/hello_daemon_cpp           u:object_r:hellodaemoncpp_exec:s0
+# Define o rótulo do daemon devweather
+/vendor/bin/hw/devtitans.devweather-service  u:object_r:devweather_daemon_exec:s0
+# Linha em branco para evitar erro de compilação
+
+
+
+

@@ -1,0 +1,8 @@
+# Define o rótulo da propriedade de sistema
+vendor.devtitans.devweather.allow_simulated  u:object_r:vendor_devweather_prop:s0
+# Linha em branco para evitar erro de compilação
+
+
+        
+
+        
