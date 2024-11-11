@@ -116,7 +116,7 @@ void processCommand(String command) {
       Serial.printf("RES GET_HUM %d\n", dhtGetHumValue());
 
     else if (command == "GET_INFO")
-      Serial.printf("RES GET_INFO %d;%d;%d;%d;%d;%d\n",ldrGetValue(),dhtGetTempValue(), dhtGetHumValue(), bmpGetPaValue(), bmpGetAltValue(), bmpGetTempValue());
+      Serial.printf("RES GET_INFO %.2f ;%.2f ;%.2f ;%.2f ;%.2f ;%.2f; %.2f; %.2f\n",dhtGetHumValue() ,dhtGetTempValue() ,ldrGetValue() ,bmpGetTempValue() , bmpGetPaValue(), bmpGetAltValue(), avgTemp(), heatIndex());
     
     else
       Serial.println("ERR Unknown command.");
@@ -133,9 +133,9 @@ void ledUpdate() {
     }
 }
 
-int ldrGetValue() {
-    int ldrAnalog = analogRead(ldrPin);
-    int ldrValue = 100*ldrAnalog/ldrMax;
+float ldrGetValue() {
+    float ldrAnalog = analogRead(ldrPin);
+    float ldrValue = 100*ldrAnalog/ldrMax;
 
     // Serial.printf("DBG LDR_MAX=%d, LDR_ANALOG=%d, LDR_VALUE=%d\n", ldrMax, ldrAnalog, ldrValue);
 
@@ -143,18 +143,36 @@ int ldrGetValue() {
 }
 
 
-int bmpGetPaValue(){
-    return int(bmp.readPressure());
+float bmpGetPaValue(){
+    return (bmp.readPressure());
 }
-int bmpGetAltValue(){
-    return int(bmp.readAltitude());
+float bmpGetAltValue(){
+    return (bmp.readAltitude());
 }
-int bmpGetTempValue(){
-    return int(bmp.readTemperature());
+float bmpGetTempValue(){
+    return (bmp.readTemperature());
 }
-int dhtGetTempValue(){
-    return int(dht.readTemperature());
+float dhtGetTempValue(){
+    return (dht.readTemperature());
 }
-int dhtGetHumValue(){
-    return int(dht.readHumidity());
+float dhtGetHumValue(){
+    return (dht.readHumidity());
+}
+float avgTemp(){
+    return (bmpGetTempValue() + dhtGetTempValue())/2.0;
+}
+float heatIndex(){
+    float T = avgTemp();  // Temperatura em °C
+    float H = dhtGetHumValue();   // Umidade relativa em %
+
+    float HI = -8.78469475505616 + 1.61139411 * T + 2.33854883889091 * H - 0.14611605 * T * H
+               - 0.012308094 * T * T - 0.016424828 * H * H + 0.002211732 * T * T * H
+               + 0.00072546 * T * H * H - 0.000003582 * T * T * H * H;
+
+    // Limita o valor do Heat Index para não ficar negativo
+    if (HI < T) {
+        HI = T; // O Heat Index não pode ser menor que a temperatura
+    }
+
+    return HI;
 }
